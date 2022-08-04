@@ -33,20 +33,4 @@ public class Util {
         public Connection getConnection() {
             return connection;
         }
-
-
-
-
-
-
-   /* public static Connection getConnection() {
-        try {
-            Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
-            System.out.println("Getting connection");
-          return connection;
-            } catch(SQLException e){
-                e.printStackTrace();
-            }
-            return null;
-        }*/
     }
