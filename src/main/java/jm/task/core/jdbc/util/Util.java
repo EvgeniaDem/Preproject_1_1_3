@@ -17,6 +17,8 @@ public class Util {
     static final String USER = "root";
     static final String PASS = "root";
 
+    private static Connection connection; // добавила для пробы
+
     public static Connection getConnection() {
         try {
             Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);

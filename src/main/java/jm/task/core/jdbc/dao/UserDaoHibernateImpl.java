@@ -23,7 +23,6 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
-
             String sql = "CREATE TABLE IF NOT EXISTS users " +
                     "(id INTEGER not NULL AUTO_INCREMENT, " +
                     " name VARCHAR(255), " +
@@ -37,6 +36,7 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e) {
             if (transaction != null)
                 transaction.rollback();
+            e.printStackTrace();
         }
     }
 
@@ -53,6 +53,7 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e) {
             if (transaction != null)
                 transaction.rollback();
+            e.printStackTrace();
         }
     }
 
@@ -68,6 +69,7 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e) {
             if (transaction != null)
                 transaction.rollback();
+            e.printStackTrace();
         }
     }
 
@@ -82,20 +84,17 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e) {
             if (transaction != null)
                 transaction.rollback();
+            e.printStackTrace();
         }
     }
 
     @Override
     public List<User> getAllUsers() {
-        Transaction transaction = null;
         List<User> users = null;
         try (Session session = factory.openSession()) {
-            transaction = session.beginTransaction();
             users = session.createQuery("from User").list();
-            transaction.commit();
         } catch (Exception e) {
-            if (transaction != null)
-                transaction.rollback();
+            e.printStackTrace();
         }
         return users;
     }
@@ -103,12 +102,17 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void cleanUsersTable() {
         Transaction transaction = null;
-        try(Session session = factory.openSession()){
+        try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
             String str = "DELETE FROM User";
             Query query = session.createQuery(str);
             query.executeUpdate();
             transaction.commit();
+        } catch (Exception e){
+            if(transaction!=null){
+                transaction.rollback();
+                e.printStackTrace();
+            }
         }
     }
 }
