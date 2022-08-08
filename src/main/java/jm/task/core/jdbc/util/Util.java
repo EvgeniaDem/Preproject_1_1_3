@@ -13,19 +13,23 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class Util {
-    static final String DB_URL = "jdbc:mysql://localhost/userdb";
-    static final String USER = "root";
-    static final String PASS = "root";
+    static final String DB_URL_DEFAULT = "jdbc:mysql://localhost/userdb";
+    static final String DB_USER_DEFAULT = "root";
+    static final String DB_PASS_DEFAULT = "root";
 
-    public static Connection getConnection() {
-        try {
-            Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
-            System.out.println("Getting connection");
-            return connection;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static Connection getConnection() throws SQLException {
+        String dbUrl = getEnv("DB_URL", DB_URL_DEFAULT);
+        String dbUser = getEnv("DB_USER", DB_USER_DEFAULT);
+        String dbPass = getEnv("DB_PASS", DB_PASS_DEFAULT);
+        // если в с-ме нет переменных окружения, то будет брать дефолтные значения DEFAULT
+        Connection connection = DriverManager.getConnection(dbUrl, dbUser, dbPass);
+        System.out.println("Getting connection");
+        return connection;
+    }
+
+    private static String getEnv(String envName, String envDefault) {
+        String env = System.getenv(envName);
+        return env == null ? envDefault : env;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
